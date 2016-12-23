@@ -45,22 +45,22 @@ void moveballstart()
             s = 0;
         }
 	}
-	if (color == FALSE)
+	if (color == TRUE)
 	{
-		for (int i = 0;i < CountAtom;i++)
+		for (int i = 0; i < CountAtom; i++)
 		{
+
+			r = random(255);
+			g = random(255);
+			b = random(255);
+			txSetFillColour(RGB(r,g,b));
 			txCircle(A[i].x, A[i].y, rad);
 		}
 	}
 	else
 	{
-		for (int i = 0; i < CountAtom; i++)
+		for (int i = 0;i < CountAtom;i++)
 		{
-
-			r = rand() % 255;
-			g = rand() % 255;
-			b = rand() % 255;
-			txColor(r, g, b);
 			txCircle(A[i].x, A[i].y, rad);
 		}
 
