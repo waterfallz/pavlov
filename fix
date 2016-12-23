@@ -1,0 +1,150 @@
+//-----------------------------------------------------------------------------------
+#include "TxLib.h"
+#include <vector>
+#include <cmath>
+//-----------------------------------------------------------------------------------includi
+
+//----------------------------------------------------------------------------------define
+#define dt 0.2 // Скорость
+#define rad 10 // Радиус Шара
+#define ScreenHeight 800 /*Разрешение создаваемого окна */
+#define ScreenWeight 600
+//------------------------------------------------------------------------------------------
+
+using namespace std;
+typedef struct atoms
+{
+	double x;
+	double y;
+	double hx;
+	double hy;
+} atomi;
+vector <atomi> A;
+
+bool shadow = FALSE;   //След
+bool color = FALSE;    //Цвета
+int s = 0, c = 0, CountAtom = 0;
+
+void balls();
+void moveballstart();
+void moveball();
+
+void moveballstart()
+{
+	float r, g, b;
+	txSetFillColor(TX_BLACK);
+	if (shadow == FALSE)
+        {
+            txClear();
+        }
+	else
+	{
+		if (s == 10)
+        {
+            txClear();
+            s = 0;
+        }
+	}
+	if (color == FALSE)
+	{
+		for (int i = 0;i < CountAtom;i++)
+		{
+			txCircle(A[i].x, A[i].y, rad);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < CountAtom; i++)
+		{
+
+			r = rand() % 255;
+			g = rand() % 255;
+			b = rand() % 255;
+			txColor(r, g, b);
+			txCircle(A[i].x, A[i].y, rad);
+		}
+
+	}
+	moveball();
+}
+
+
+void moveball()
+{
+//Мышь
+	c--;
+	s++;
+	A[0].x = txMouseX();
+	A[0].y = txMouseY();
+	for (int i = 0; i < CountAtom; i++)
+        {
+            A[i].x = A[i].x + A[i].hx*dt;
+            A[i].y = A[i].y + A[i].hy*dt;
+            for (int j = 0; j < CountAtom; j++)
+                {
+                if (sqrt((A[i].x - A[j].x)*(A[i].x - A[j].x) + (A[i].y - A[j].y)*(A[i].y - A[j].y)) <= 13)
+                    {
+                        A[i].hx = -A[i].hx;
+                        A[j].hx = -A[j].hx;
+                    }
+                }
+//Отталкивание от границ экрана
+		if (A[i].x >= ScreenHeight)
+            {
+                A[i].hx = -A[i].hx;
+                A[i].x = 2 * ScreenHeight - A[i].x;
+            }
+		if (A[i].y >= ScreenWeight)
+            {
+                A[i].hy = -A[i].hy;
+                A[i].y = 2 * ScreenWeight - A[i].y;
+            }
+		if (A[i].x <= 0)
+            {
+                A[i].hx = -A[i].hx;
+                A[i].x = 2 * 0 - A[i].x;
+            }
+		if (A[i].y <= 0)
+            {
+                A[i].hy = -A[i].hy;
+                A[i].y = 2 * 0 - A[i].y;
+            }
+		txSleep(10);
+        }
+	balls();
+}
+
+void balls()
+{
+	atomi ball;
+	if ((c == 0) && (CountAtom != 7))
+    {
+        ball.x = rand() + rand() % 120;
+        ball.y = rand() + rand() % 120;
+        ball.hx = rand() % 100 - 20;
+        ball.hy = rand() % 100 - 20;
+        A.push_back(ball);     //Отталкивание
+        CountAtom = A.size();
+        c = 20;
+        moveballstart();
+    }
+    else
+    {
+		moveballstart();
+    }
+}
+
+
+int main()
+{
+	txCreateWindow(ScreenHeight, ScreenWeight);
+	atomi ball;
+	ball.x = rand() + rand() % 200;
+	ball.y = rand() + rand() % 200;
+	ball.hx = rand() % 150 - 100;
+	ball.hy = rand() % 150 - 100;
+	A.push_back(ball);
+	CountAtom = A.size();
+	balls();
+	return 0;
+}
