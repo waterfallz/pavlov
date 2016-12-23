@@ -1,0 +1,143 @@
+#include "TXLib.h"
+
+
+#define n 150
+#define m 150
+#define h 1
+#define dt 0.2
+#define ScreenHeight 800
+#define ScreenWeight 600
+
+
+int ii,jj,kk,i,j;
+double t[n][m];
+bool naprav,uslovie;
+float a,q,b,bb,y;
+
+void Param_sred() /*Коэффициент температуропроводности*/
+{
+    if (j<70)
+    {
+        a=2;
+    }
+
+    else
+    {
+        a=1;
+    }
+}
+void Istoch()  /*Источники тепла*/
+{
+    if( (((i>45) && (i<55)) && ((j>70) && (j<75)))   ||
+        (((i>15) && (i<25)) && ((j>60) && (j<95)))   ||
+        (((i>30) && (i<60) && (j>50) && (j<65)))     ||
+	    (((i>80) && (i<110) && (j>120) &&(j<150)))   ||
+	    (((i>120) && (i<140) && (j>135) && (j<160))))
+    {
+        q=5 ;
+    }
+    else
+    {
+        q=0;
+    }
+}
+void PoglIstoch()
+{
+	if( ((i>20) && (i<70)) && ((j>30) && (j<60)))
+	{
+	    y=-50;
+    }
+	else
+    {
+        y=0;
+    }
+}
+void Nach_uslov() /*Начальное распределение температуры */
+{
+    for (i=1;i<=n;i++)
+    {
+        for (j=1;j<=m;j++)
+        {
+            uslovie=((j<65)&&(j>45)&&(i>20)&&(i<30))
+                || ((j<45)&&(j>35)&&(i>50)&&(i<60));
+        }
+    if (uslovie==true)
+    {
+        t[i][j]=450;
+    }
+    else
+    {
+        t[i][j]=1;
+    }
+    }
+}
+
+void Raschet() /*Расчет температуры */
+{	Istoch();
+	PoglIstoch();
+	Param_sred();
+    t[i][j]=t[i][j]+a*(t[i][j+1]-2*t[i][j]+t[i][j-1])*dt/(h*h)+q;
+	t[i][j]=t[i][j]+a*(t[i][j+1]-2*t[i][j]+t[i][j-1])*dt/(h*h)+y;
+    if (naprav==true)
+    {
+        t[i][j]=t[i][j]+a*(t[i+1][j]-2*t[i][j]+t[i-1][j])*dt/(h*h);
+    }
+}
+
+void Draw() /*Вывод на экран */
+{
+    if (t[i][j]>50) txSetColor(TX_GREEN);
+    if (t[i][j]>300) txSetColor(TX_LIGHTRED);
+    if ((t[i][j]<300)&&(t[i][j]>120))  txSetColor(TX_LIGHTGREEN);
+    if ((t[i][j]<120)&&(t[i][j]>70)) txSetColor(TX_CYAN);
+    if ((t[i][j]<70)&&(t[i][j]>30))  txSetColor(TX_RED);
+    if ((t[i][j]<30)&&(t[i][j]>20))  txSetColor(TX_MAGENTA);
+    if ((t[i][j]<20)&&(t[i][j]>10))  txSetColor(TX_LIGHTGRAY);
+    if (t[i][j]<10) txSetColor(TX_WHITE);
+    txRectangle(i*5+50,j*5,i*5+54,j*5+4);
+}
+int main()
+{
+
+	txCreateWindow(ScreenHeight,ScreenWeight);
+	Nach_uslov();
+
+    while (!GetAsyncKeyState(VK_SPACE))
+    {
+        kk=kk+1;
+        for (i=2;i<n-1;i++)
+            for (j=2;j<m-1;j++)
+            {
+                naprav = false;
+                Raschet();
+            }
+        for (j=2;j<m-1;j++)
+            for (i=2;i<n-1;i++)
+            {
+                naprav = true;
+                Raschet();
+            }
+        for (i=2;i<n-1;i++)
+            for (jj=2;jj<m-1;jj++)
+            {
+          j=m+1-jj;
+          naprav = true;
+          Raschet();
+            }
+        for (j=2;i<m-1;j++)
+            for (ii=2;ii<n-1;ii++)
+            {
+                i=n+1-ii;
+                naprav = false;
+                Raschet();
+            }
+        if ((kk/2.0)==(kk/2))
+        {
+            for (i=2;i<n-1;i++)
+                for (j=2;j<m-1;j++)
+                Draw();
+        }
+
+    }
+return 0;
+}
