@@ -1,10 +1,9 @@
 //-----------------------------------------------------------------------------------
 #include "TxLib.h"
 #include <vector>
-#include <cmath>
-//-----------------------------------------------------------------------------------includi
+//-----------------------------------------------------------------------------------includes
 
-//----------------------------------------------------------------------------------define
+//----------------------------------------------------------------------------------defines
 #define dt 0.2 // Скорость
 #define rad 10 // Радиус Шара
 #define ScreenHeight 800 /*Разрешение создаваемого окна */
@@ -119,10 +118,10 @@ void balls()
 	atomi ball;
 	if ((c == 0) && (CountAtom != 7))
     {
-        ball.x = rand() + rand() % 120;
-        ball.y = rand() + rand() % 120;
-        ball.hx = rand() % 100 - 20;
-        ball.hy = rand() % 100 - 20;
+        ball.x = random + random(120);
+        ball.y = random + random(120);
+        ball.hx = random(100) - 20;
+        ball.hy = random(100) - 20;
         A.push_back(ball);     //Отталкивание
         CountAtom = A.size();
         c = 20;
@@ -139,10 +138,10 @@ int main()
 {
 	txCreateWindow(ScreenHeight, ScreenWeight);
 	atomi ball;
-	ball.x = rand() + rand() % 200;
-	ball.y = rand() + rand() % 200;
-	ball.hx = rand() % 150 - 100;
-	ball.hy = rand() % 150 - 100;
+	ball.x = random + random(200);
+	ball.y = random + random(200;
+	ball.hx = random(150) - 100;
+	ball.hy = random(150) - 100;
 	A.push_back(ball);
 	CountAtom = A.size();
 	balls();
