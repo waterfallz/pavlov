@@ -1,0 +1,37 @@
+#include "TXLib.h"
+#define ScreenWeight = 800;
+#define ScreenHeight = 600;
+
+void Chaynik(int x,int y)
+{
+/*    --------------------------------------------------------------------------------------------
+    /*txSetColour(TX_RED,2.3);
+    /txTextOut(1,1,"TEST");
+    /txRectangle (100, 200, 400, 500); // использую функцию из либы, но пока не получается приделать движение по x,y
+-------------------------------------------------------------------------------------------------*/
+
+txSetColour(TX_PINK);
+txLine((170+x)/y, 170/y, (170+x)/y, 370/y);
+txLine((170+x)/y, 370/y, (270+x)/y, 370/y);  //Рисуем прямоугольник линиями
+txLine((270+x)/y, 370/y, (270+x)/y, 170/y);
+txLine((270+x)/y, 170/y, (170+x)/y, 170/y);
+
+txSetColor(TX_RED);
+txSetFillColor(TX_RED);
+txCircle((300+x)/y, 240/y, 30/y);
+//рисуем носик
+txSetColor(TX_GREEN);
+txSetFillColour(TX_GREEN);
+txLine((170+x)/y, 240/y, (140+x)/y, 240/y);
+txSetColor(TX_YELLOW);
+txLine((140+x)/y, 240/y, (170+x)/y, 280/y);
+
+}
+
+
+int main()
+{
+txCreateWindow(ScreenWeight, ScreenHeight);
+Chaynik(600,5);
+Chaynik(200,1);
+}
