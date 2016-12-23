@@ -1,0 +1,145 @@
+//includes
+#include "TXLib.h"
+#include "math.h"
+//defines
+#define  n 110
+#define  m  90
+#define  s 13
+#define  r  6
+#define  h  5
+#define ScreenHeight 800
+#define ScreenWeight 600
+
+//variables
+int y[n][m], yy[n][m], u[n][m];
+int ii, jj, j, k;
+long i;
+
+
+int main()
+{
+	txCreateWindow(ScreenHeight, ScreenWeight);
+	txSetColor(TX_BLACK);
+	txSetFillColor(TX_YELLOW);
+	for (j = 1; j <= 45; j++)
+	{
+		for (i = 1; i <= 13; i++)
+		{
+			y[40 + i][j] = i;
+		}
+	}
+	for (i = 1; i<13; i++)
+	{
+		y[40 + i][j] = i;
+		if (j>40)
+		{
+			y[40 + i][j] = 14 - i;
+		}
+	}
+
+	while (true)
+	{
+		if (k == round((k/20)*20)
+		{
+			y[90][60] = 1;
+		}
+		if (k == int(k / 20 + .5) * 20)
+		{
+			y[20][70] = 1;
+		}
+		for (i = 2; i <= n - 1; i++)
+		{
+			for (j = 2; j <= m - 1; j++)
+			{
+				if ((y[i][j]>0) && (y[i][j]<s))
+				{
+					yy[i][j] = y[i][j] + 1;
+				}
+				if (y[i][j] == s)
+				{
+					yy[i][j] = 0;
+					u[i][j] = 0;
+				}
+				if (y[i][j] != 0)
+				{
+					goto met;
+				}
+
+			}
+				for (ii = i - 1; ii <= i + 1; ii++)
+				{
+					for (jj = j - 1; jj <= j + 1; jj++)
+					{
+						if ((y[ii][jj]>0) && (y[ii][jj] <= r))
+						{
+							u[i][j] = u[i][j] + 1;
+						}
+						if (u[i][j] >= h)
+						{
+							yy[i][j] = 1;
+						}
+					}
+				}
+
+			met:
+				continue;
+        }
+    }
+
+		txSleep(100);
+		txSetFillColor(TX_BLACK);
+		txClear();
+		txSetColor(TX_GREEN);
+		for (i = 21; i <= 70; i++)
+		{
+			yy[i][60] = 0;
+			yy[i][61] = 0;
+			txCircle(6 * i - 10, 500 - 6 * 60, 3);
+			txCircle(6 * i - 10, 500 - 6 * 61, 3);
+		}
+		for (j = 50; j <= 60; j++)
+		{
+			yy[31][j] = 0;
+			yy[32][j] = 0;
+			yy[59][j] = 0;
+			yy[60][j] = 0;
+			txCircle(6 * 31 - 10, 500 - 6 * j, 3);
+			txCircle(6 * 32 - 10, 500 - 6 * j, 3);
+			txCircle(6 * 59 - 10, 500 - 6 * j, 3);
+			txCircle(6 * 60 - 10, 500 - 6 * j, 3);
+		}
+		for (i = 60; i <= 100; i++)
+		{
+			yy[i][20] = 0;
+			yy[i][21] = 0;
+			txCircle(6 * i - 10, 500 - 6 * 20, 3);
+			txCircle(6 * i - 10, 500 - 6 * 21, 3);
+		}
+		for (j = 21; j <= 50; j++)
+		{
+			yy[89][j] = 0;
+			yy[90][j] = 0;
+			txCircle(6 * 89 - 10, 500 - 6 * j, 3);
+			txCircle(6 * 90 - 10, 500 - 6 * j, 3);
+		}
+		txSetColor(TX_MAGENTA);
+
+		for (i = 1; i<n; i++)
+		{
+			for (j = 1; j<m; j++)
+			{
+				y[i][j] = yy[i][j];
+				txSetColor(TX_RED);
+				if ((y[i][j] >= 1) && (y[i][j] <= r))
+				{
+					txCircle(6 * i - 10, 500 - 6 * j, 3);
+				}
+				txSetColor(TX_MAGENTA);
+				if ((y[i][j]>6) && (y[i][j] <= s))
+				{
+					txCircle(6 * i - 10, 500 - 6 * j, 2);
+				}
+            }
+
+		}return 0;
+}
