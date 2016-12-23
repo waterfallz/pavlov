@@ -4,7 +4,7 @@
 #define n 150
 #define m 150
 #define h 1
-#define dt 0.2
+const fload dt = 0.2
 #define ScreenHeight 800
 #define ScreenWeight 600
 
