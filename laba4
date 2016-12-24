@@ -3,7 +3,7 @@
 const int n=265, h=1;
 const float dt = 0.05;
 int i,j;
-double aa=2,tt=6.28,CAEF=0;
+double aa=2,tt=6.28,koff=0;
 double eta[n], xi[n], xxii[n], xi1[n],xxii1[n],eta1[n];
 float t=0,vv,vv1;
 
@@ -25,10 +25,10 @@ void Raschet()
 	}
 	for (i=2;i<=n-1;i++)
 		xi[i]=xi[i]+eta[i]*dt;
-	
+
 	xi[n]=xi[n-1];
 	}
-void Raschet1()
+void Schet()
 {
 	for (j=n-1;j>=2;j--)
 	{
@@ -45,55 +45,55 @@ void Raschet1()
 	}
 	for (j=n-1;j>=2;j--)
 		xi1[j]=xi1[j]+eta1[j]*dt;
-	
+
 	xi1[n]=xi1[n-1];
-	}
+}
 void Draw()
 {
-	
+
 	txSetColor(TX_BLACK);
 	txLine(i*3,240+(xxii[i]*50),i*3-3,240+(xxii[i-1]*50));
 	txSetColor(TX_GREEN);
 	txLine(i*3,240+(xi[i]*50),i*3-3,240+(xi[i-1]*50));
 }
-void Draw1()
+void Draw2()
 {
 	txSetColor(TX_BLACK);
 	txLine(j*3-3,240-(xxii1[j-1]*50)+400,j*3,240-(xxii1[j]*50)+400);
 	txSetColor(TX_RED);
 	txLine(j*3-3,240-(xi1[j-1]*50)+400,j*3,240-(xi1[j]*50)+400);
 }
-void Zapusk(double CAEF)
+void Zapusk(double koff)
 {
 	setlocale(LC_ALL,"RUS");
 	int A;
-	
+
 	txSetFillColor(TX_BLACK);
-	
+
 	txClear();
-	cout<<"Нажмите 1 или 2, нажмите ENTER для начала"<<"\n";
-label_1:
+	cout<<"Нажмите 1 для добавления - амплитуды, 2 для задания + амплитуды\nНажмите Enter для начала"<<"\n";
+label:
 	A=getch();
-	
+
 	switch(A)
 	{
-		case 50: CAEF+=0.1;cout<<CAEF<<"\t";break;
-		case 49: CAEF-=0.1;cout<<CAEF<<"\t";break;
+		case 50: koff+=0.1;cout<<koff<<"\t";break;
+		case 49: koff-=0.1;cout<<koff<<"\t";break;
 	};
-	if (A!=13) goto label_1;
+	if (A!=13) goto label;
 	txSetFillColor(TX_BLACK);
 	txClear();
 	txClearConsole();
-	cout<<CAEF<<" ";
-	cout<<"Нажмите пробел для завершения";
+	cout<<koff<<" ";
+	cout<<"Нажмите ESC для возврата в меню";
 	while(true)
 	{
-		
+
 		t+=dt;
 		if (t<tt)
 		{
-			xi[n]=CAEF*sin(t);
-			xi1[1]=CAEF*sin(t);
+			xi[n]=koff*sin(t);
+			xi1[1]=koff*sin(t);
 		}
 		else
 		{
@@ -101,24 +101,24 @@ label_1:
 			xi1[1]=0;
 		}
 		Raschet();
-		Raschet1();
+		Schet();
 		for (i=1;i<=n;i++)
 		{
 			Draw();
 		}
 		for (j=n;j>=1;j--)
 		{
-			Draw1();
+			Draw2();
 		}
 
-		
-		if (GetAsyncKeyState(VK_SPACE))
+
+		if (GetAsyncKeyState(VK_ESCAPE))
 		{
-			break; 
+			break;
 		}
-		
+
 	};
-	
+
 	for (i=2;i<=n-1;i++)
 	{
 		eta[i]=0;
@@ -127,17 +127,17 @@ label_1:
 		xi1[i]=0;
 		xxii[i]=0;
 		xxii1[i]=0;
-		
+
 	}
 	txSetFillColor(TX_BLACK);
 	txClearConsole();
 	txClear();
 	t=0;
-	
+
 	Zapusk(0);
 }
 int main()
 {
-	txCreateWindow(800,750);
-	Zapusk(0);	
+	txCreateWindow(800,600);
+	Zapusk(0);
 }
