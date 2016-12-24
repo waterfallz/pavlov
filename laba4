@@ -1,71 +1,143 @@
 #include "TXLib.h"
 #include "math.h"
-
-
-#define n 200
-#define h 1
-#define ScreenHeight 800
-#define ScreenWeight 600
-
-
-const float dt=0.50;
+const int n=265, h=1;
+const float dt = 0.05;
 int i,j;
-double eta[n], xi[n], xxii[n];
-float t,vv;
+double aa=2,tt=6.28,CAEF=0;
+double eta[n], xi[n], xxii[n], xi1[n],xxii1[n],eta1[n];
+float t=0,vv,vv1;
+
 
 void Raschet()
 {
-
-	for (i=1;i<=n-1;i++)
+	for (i=2;i<=n-1;i++)
 	{
-		xxii[i] = xi[i];
+		xxii[i]=xi[i];
 		if (i<(n/2))
 		{
 			vv=4;
 		}
 		else
 		{
-			vv=0.9;
+			vv=0.5;
 		}
-		eta[i]=eta[i]+vv*(xi[i + 1]-2*xi[i]+xi[i-1])/(h*h)*dt;
-		}
+		eta[i]=eta[i]+vv*(xi[i+1]-2*xi[i]+xi[i-1])/(h*h)*dt;
+	}
 	for (i=2;i<=n-1;i++)
 		xi[i]=xi[i]+eta[i]*dt;
-	xi[n]=0;
-}
-
-void Draw()
+	
+	xi[n]=xi[n-1];
+	}
+void Raschet1()
 {
-	txSetColor(TX_BLACK);
-	txLine(i*3-3,240-(xxii[i-1]*50),i*3,240-(xxii[i]*50));
-	txSetColor(TX_GREEN);
-	txLine(i*3-3,240-(xi[i-1]*50),i*3,240-(xi[i]*50));
-
-}
-
-int main()
-{
-
-	txCreateWindow(ScreenHeight, ScreenWeight);
-	while (!GetAsyncKeyState(VK_SPACE))
-    {
-
-
-		t=t+dt;
-		if (t<6.28)
+	for (j=n-1;j>=2;j--)
+	{
+		xxii1[j]=xi1[j];
+		if (j<(n/2))
 		{
-			xi[1]=2*sin(t);
+			vv1=4;
 		}
 		else
 		{
-			xi[1]=0;
+			vv1=0.5;
+		}
+		eta1[j]=eta1[j]+vv1*(xi1[j+1]-2*xi1[j]+xi1[j-1])/(h*h)*dt;
+	}
+	for (j=n-1;j>=2;j--)
+		xi1[j]=xi1[j]+eta1[j]*dt;
+	
+	xi1[n]=xi1[n-1];
+	}
+void Draw()
+{
+	
+	txSetColor(TX_BLACK);
+	txLine(i*3,240+(xxii[i]*50),i*3-3,240+(xxii[i-1]*50));
+	txSetColor(TX_GREEN);
+	txLine(i*3,240+(xi[i]*50),i*3-3,240+(xi[i-1]*50));
+}
+void Draw1()
+{
+	txSetColor(TX_BLACK);
+	txLine(j*3-3,240-(xxii1[j-1]*50)+400,j*3,240-(xxii1[j]*50)+400);
+	txSetColor(TX_RED);
+	txLine(j*3-3,240-(xi1[j-1]*50)+400,j*3,240-(xi1[j]*50)+400);
+}
+void Zapusk(double CAEF)
+{
+	setlocale(LC_ALL,"RUS");
+	int A;
+	
+	txSetFillColor(TX_BLACK);
+	
+	txClear();
+	cout<<"Нажмите 1 или 2, нажмите ENTER для начала"<<"\n";
+label_1:
+	A=getch();
+	
+	switch(A)
+	{
+		case 50: CAEF+=0.1;cout<<CAEF<<"\t";break;
+		case 49: CAEF-=0.1;cout<<CAEF<<"\t";break;
+	};
+	if (A!=13) goto label_1;
+	txSetFillColor(TX_BLACK);
+	txClear();
+	txClearConsole();
+	cout<<CAEF<<" ";
+	cout<<"Нажмите пробел для завершения";
+	while(true)
+	{
+		
+		t+=dt;
+		if (t<tt)
+		{
+			xi[n]=CAEF*sin(t);
+			xi1[1]=CAEF*sin(t);
+		}
+		else
+		{
+			xi[n]=0;
+			xi1[1]=0;
 		}
 		Raschet();
+		Raschet1();
 		for (i=1;i<=n;i++)
 		{
 			Draw();
 		}
+		for (j=n;j>=1;j--)
+		{
+			Draw1();
+		}
 
-
+		
+		if (GetAsyncKeyState(VK_SPACE))
+		{
+			break; 
+		}
+		
+	};
+	
+	for (i=2;i<=n-1;i++)
+	{
+		eta[i]=0;
+		eta1[i]=0;
+		xi[i]=0;
+		xi1[i]=0;
+		xxii[i]=0;
+		xxii1[i]=0;
+		
 	}
+	txSetFillColor(TX_BLACK);
+	txClearConsole();
+	txClear();
+	t=0;
+	
+	Zapusk(0);
+}
+int main()
+{
+	txCreateWindow(800,750);
+	Zapusk(0);	
 }
