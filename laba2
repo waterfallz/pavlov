@@ -1,133 +1,172 @@
 #include "TXLib.h"
-const int n = 110, m = 90, s = 13, r = 6, h = 5;
-int y[n][m], yy[n][m], u[n][m];
-int ii, jj, j, k;
-long i;
-int main()
+#include "windows.h"
+#include "math.h"
+
+using namespace std;
+
+COLORREF REF;
+int SETKA = 0; //tip setki
+int clrchoice = 1; //color
+double xs = 500, ys = 300; //x0 y0
+double x = 0, y = 0;
+bool credits = false; //credit flag
+bool f1 = false, f2 = false, f3 = false , f4 = false , f5 = false; //Gr
+int Mx = 0, My = 0;
+
+//create window
+void Ini()
 {
-	txCreateWindow(800, 600);
-	txSetColor(TX_WHITE);
-	txSetFillColor(TX_RED);
-	for (j = 1; j <= 45; j++)
-	{
-		for (i = 1; i <= 13; i++)
-		{
-			y[40 + i][j] = i;
-		}
-	}
-	for (i = 1; i<13; i++)
-	{
-		y[40 + i][j] = i;
-		if (j>40)
-		{
-			y[40 + i][j] = 14 - i;
-		}
-	}
+    txCreateWindow(800, 600);
+    txTextCursor(FALSE);
+};
+//frame
+void Frame(){
+    txSetColour(TX_DARKGRAY, 4);
+    txSetFillColour(TX_WHITE);
+    txRectangle(200,0,800,600);
+    txRectangle(0,0,200,600);
+};
+void DrawText(){
+    txTextOut(80, 90, "SETKA");
+    txTextOut(80,120,"Use Left-Shift to change colors");
+    if (SETKA == 0) txTextOut(85, 120, "Net setki");
+    if (SETKA == 1) txTextOut(75, 120, "Step = 0.5");
+    if (SETKA == 2) txTextOut(85, 120, "Step = 1");
+    txTextOut(80, 280, "Color");
+    if (clrchoice == 1) txTextOut(85, 320, "GREEN");
+    if (clrchoice == 2) txTextOut(85, 320, "RED");
+    if (clrchoice == 3) txTextOut(85, 320, "BLUE");
+}
 
-	while (true)
-	{
-		if (k == round((k/20)*20)) //(k == int(k / 20 + .5) * 20)
-		{
-			y[80][50] = 1;
-		}
-		if (k == round((k/20)*20))
-		{
-			y[20][70] = 1;
-		}
-		for (i = 2; i <= n - 1; i++)
-		{
-			for (j = 2; j <= m - 1; j++)
-			{
-				if ((y[i][j]>0) && (y[i][j]<s))
-				{
-					yy[i][j] = y[i][j] + 1;
-				}
-				if (y[i][j] == s)
-				{
-					yy[i][j] = 0;
-					u[i][j] = 0;
-				}
-				if (y[i][j] != 0)
-				{
-					goto met;
-				}
+void creds(bool flag)
+{
+    if (flag) txTextOut(10, 580, "MAGU CODENZ LLC\n Thanks for help Ilya Ermolaev");
+};
+
+void DrawSetka(double k)
+{
+    txSetColour(TX_DARKGRAY, 0.5);
+    double x;
+    double y;
+    for (int kk = 0; kk < 100; kk++){
+    x = k*25+k*kk*25+xs;
+    y = k*25-k*kk*25+xs;
+    if (x < 800) txLine (x, 0, x, 600);
+    if (y > 200) txLine (y, 0, y, 600);
+    x = k*25+k*kk*25+ys;
+    y = k*25-k*kk*25+ys;
+    if (y > 0) txLine (200, y, 800, y);
+    if (x < 600) txLine (200, x, 800, x);
+}
+};
+//net itself
+void setkabuild()
+{
+    SETKA++;
+    if (SETKA > 2) SETKA = 0;
+    if (SETKA == 0) SETKA = 0;
+    if (SETKA == 1) DrawSetka(0.5);
+    if (SETKA == 2) DrawSetka(1);
+    txSetColour(TX_BLACK, 1.5);
+    txLine (500, 0, 500, 600);
+    txLine (200, 300, 800, 300);
+};
+
+void ColorChange()
+{
+    clrchoice++;
+    if (clrchoice> 3) clrchoice = 1;
+    if (clrchoice == 1) REF = TX_GREEN;
+    if (clrchoice == 2) REF = TX_RED;
+    if (clrchoice == 3) REF = TX_BLUE;
+}
+//gr1
+void GSin(bool gd)
+{
+if (gd) for (x=-300; x < 300; x+=0.01)
+    {
+        y=sin(x)*(-25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+    }
+};
+//gr2
+void GSMq(bool smd)
+{
+    if (smd) for (x=-300; x < 300; x+=0.01)
+    {
+        y = 0.25*(x*x)*(-25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+        y = 0.25*(x*x)*(25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+    }
+};
+//gr3
+void GSqcos(bool qcd)
+{
+    if (qcd) for (x=-300; x < 300; x+=0.01)
+    {
+        y=x*x*cos(x)*(-25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+    }
+};
+//Button1 (Net)
+void ButtonNet(bool nl)
+{
+    txSetColour(TX_DARKGRAY, 4);
+    if (nl) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
+    txRectangle(0, 0, 200, 200);
+    txSetColour(TX_BLACK, 4);
+    DrawText();
+}
+//Button2 (Color)
+void ButCl(bool cl)
+{
+    txSetColour(TX_DARKGRAY, 4);
+    if (cl) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
+    txRectangle(0, 200, 200, 400);
+    txSetColour(TX_BLACK, 4);
+    DrawText();
+}
+//Draw Text
+
+//MAIN
+int main(){
+//ini
+Ini();
+Frame();
+setkabuild();
+REF = TX_GREEN;
+
+//workspace
+while (1)
+{
+    Mx = txMouseX();
+    My = txMouseY();
+    if (GetAsyncKeyState(VK_ESCAPE)) break; //Vihod
+
+    if ((Mx < 200)&&(My < 200)) ButtonNet(1); else ButtonNet(0);
+    if ((Mx < 200)&&(My < 400)&&(My > 200)) ButCl(1); else ButCl(0);
+    if ((GetAsyncKeyState(VK_SPACE))||((txMouseButtons() == 1)&&(Mx < 200)&&(My < 200))) { //perekl setki
+    txClear();
+    Frame();
+    setkabuild();
+}
+
+if ((GetAsyncKeyState(VK_LSHIFT))||((txMouseButtons() == 1)&&((Mx < 200)&&(My < 400)&&(My > 200)))) ColorChange(); //perekl cveta
+if ((GetAsyncKeyState(VK_TAB))||((txMouseButtons() == 1)&&((Mx < 200)&&(My < 600)&&(My > 400)))) if (credits) credits = false; else credits = true;
+creds(credits); // credits
+
+//Graphs
+if (GetAsyncKeyState(0x31)) if (f1) f1 = FALSE; else f1 = true;
+if (GetAsyncKeyState(0x32)) if (f2) f2 = FALSE; else f2 = true;
+if (GetAsyncKeyState(0x33)) if (f3) f3 = FALSE; else f3 = true;
+
+GSin(f1);
+GSMq(f2);
+GSqcos(f3);
 
 
-				for (ii = i - 1; ii <= i + 1; ii++)
-				{
-					for (jj = j - 1; jj <= j + 1; jj++)
-					{
-						if ((y[ii][jj]>0) && (y[ii][jj] <= r))
-						{
-							u[i][j] = u[i][j] + 1;
-						}
-						if (u[i][j] >= h)
-						{
-							yy[i][j] = 1;
-						}
-					}
-				}
-
-			met:
-				continue;
-			}
-		}
-
-		txSleep(100);
-		txSetFillColor(TX_BLACK);
-		txClear();
-		txSetColor(TX_GREEN);
-		for (i = 21; i <= 70; i++)
-		{
-			yy[i][60] = 0;
-			yy[i][61] = 0;
-			txCircle(6 * i - 10, 500 - 6 * 60, 3);
-			txCircle(6 * i - 10, 500 - 6 * 61, 3);
-		}
-		for (j = 40; j <= 60; j++)
-		{
-			yy[21][j] = 0;
-			yy[22][j] = 0;
-			yy[69][j] = 0;
-			yy[70][j] = 0;
-			txCircle(6 * 21 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 22 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 69 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 70 - 10, 500 - 6 * j, 3);
-		}
-		for (i = 60; i <= 100; i++)
-		{
-			yy[i][10] = 0;
-			yy[i][11] = 0;
-			txCircle(6 * i - 10, 500 - 6 * 10, 3);
-			txCircle(6 * i - 10, 500 - 6 * 11, 3);
-		}
-		for (j = 11; j <= 40; j++)
-		{
-			yy[99][j] = 0;
-			yy[100][j] = 0;
-			txCircle(6 * 99 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 100 - 10, 500 - 6 * j, 3);
-		}
-		txSetColor(TX_MAGENTA);
-
-		for (i = 1; i<n; i++)
-		{
-			for (j = 1; j<m; j++)
-			{
-				y[i][j] = yy[i][j];
-				txSetColor(TX_RED);
-				if ((y[i][j] >= 1) && (y[i][j] <= r))
-				{
-					txCircle(6 * i - 10, 500 - 6 * j, 3);
-				}
-				txSetColor(TX_MAGENTA);
-				if ((y[i][j]>6) && (y[i][j] <= s))
-				{
-					txCircle(6 * i - 10, 500 - 6 * j, 2);
-				}
-			}
-		}
-	}
-	return 0;
+}
+txDisableAutoPause();
+return 0;
 }
