@@ -1,133 +1,388 @@
 #include "TXLib.h"
-const int n = 110, m = 90, s = 13, r = 6, h = 5;
-int y[n][m], yy[n][m], u[n][m];
+using namespace std;
+
+
+const int N = 110, M = 90, s = 13, r = 6, h = 5;
+int y[N][M], yy[N][M], u[N][M];
 int ii, jj, j, k;
 long i;
+
+
 int main()
 {
-	txCreateWindow(800, 600);
-	txSetColor(TX_WHITE);
-	txSetFillColor(TX_RED);
-	for (j = 1; j <= 45; j++)
-	{
-		for (i = 1; i <= 13; i++)
-		{
-			y[40 + i][j] = i;
-		}
+    txCreateWindow(700, 600);
+    //txSetFillColor(TX_BLACK);
+    cout << "vvedite nomer deistviya" << endl;
+    char answer;
+    cin >> answer;
+    txClearConsole();
+    if (answer == '1')
+    {
+        for (j = 1; j <= 45; j++)
+        {
+            for (i = 1; i <= 13; i++)
+            {
+                y[40 + i][j] = i;
+            }
+        }
+        while (true)
+        {
+            if (k == round((k/20)*20))
+            {
+                y[80][50] = 1;
+            }
+            for (i = 2; i <= N - 1; i++)
+            {
+                for (j = 2; j <= M - 1; j++)
+                {
+                    if ((y[i][j]>0) && (y[i][j]<s))
+                    {
+                        yy[i][j] = y[i][j] + 1;
+                    }
+                    if (y[i][j] == s)
+                    {
+                        yy[i][j] = 0;
+                        u[i][j] = 0;
+                    }
+                    if (y[i][j] != 0)
+                    {
+                        goto met;
+                    }
+
+
+                    for (ii = i - 1; ii <= i + 1; ii++)
+                    {
+                        for (jj = j - 1; jj <= j + 1; jj++)
+                        {
+                            if ((y[ii][jj]>0) && (y[ii][jj] <= r))
+                            {
+                                u[i][j] = u[i][j] + 1;
+                            }
+                            if (u[i][j] >= h)
+                            {
+                                yy[i][j] = 1;
+                            }
+                        }
+                    }
+
+            met:
+                    continue;
+                }
+            }
+
+            txSleep(100);
+            txSetFillColor(TX_BLACK);
+            txClear();
+            txSetColor(TX_GREEN);// препятствия
+            txSetFillColor(TX_GREEN);
+            for (i = 21; i <= 70; i++)
+            {
+                yy[i][60] = 0;
+                yy[i][61] = 0;
+                txCircle(6 * i - 10, 500 - 6 * 60, 3);
+                txCircle(6 * i - 10, 500 - 6 * 61, 3);
+            }
+
+            for (i = 1; i<N; i++)
+            {
+                for (j = 1; j<M; j++)
+                {
+                    y[i][j] = yy[i][j];
+                    txSetColor(TX_YELLOW);
+                    txSetFillColor(TX_YELLOW);
+                    if ((y[i][j] >= 1) && (y[i][j] <= r))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 3);
+                    }
+                    txSetColor(TX_LIGHTBLUE);
+                    txSetFillColor(TX_LIGHTBLUE);
+                    if ((y[i][j]>6) && (y[i][j] <= s))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 2);
+                    }
+                }
+            }
+        }
+    }
+
+	////////////////////////////////////////////////////////////////////////////////
+    if (answer == '2')
+    {
+        for (j = 1; j <= 45; j++)
+        {
+            for (i = 1; i <= 13; i++)
+            {
+                y[40 + i][j] = i;
+            }
+        }
+        while (true)
+        {
+            if (k == round((k/20)*20))
+            {
+                y[80][50] = 1;
+            }
+            for (i = 2; i <= N - 1; i++)
+            {
+                for (j = 2; j <= M - 1; j++)
+                {
+                    if ((y[i][j]>0) && (y[i][j]<s))
+                    {
+                        yy[i][j] = y[i][j] + 1;
+                    }
+                    if (y[i][j] == s)
+                    {
+                        yy[i][j] = 0;
+                        u[i][j] = 0;
+                    }
+                    if (y[i][j] != 0)
+                    {
+                        goto met1;
+                    }
+
+
+                    for (ii = i - 1; ii <= i + 1; ii++)
+                    {
+                        for (jj = j - 1; jj <= j + 1; jj++)
+                        {
+                            if ((y[ii][jj]>0) && (y[ii][jj] <= r))
+                            {
+                                u[i][j] = u[i][j] + 1;
+                            }
+                            if (u[i][j] >= h)
+                            {
+                                yy[i][j] = 1;
+                            }
+                        }
+                    }
+
+                met1:
+                    continue;
+                }
+            }
+            txSleep(100);
+            txSetFillColor(TX_BLACK);
+            txClear();
+            txSetColor(TX_GREEN);// препятствия
+            txSetFillColor(TX_GREEN);
+            for (i = 21; i <= 70; i++)
+            {
+                yy[i][60] = 0;
+                yy[i][61] = 0;
+                txCircle(6 * i - 10, 500 - 6 * 60, 3);
+                txCircle(6 * i - 10, 500 - 6 * 61, 3);
+            }
+            for (j = 40; j <= 60; j++)
+            {
+                yy[21][j] = 0;
+                yy[22][j] = 0;
+                yy[69][j] = 0;
+                yy[70][j] = 0;
+                txCircle(6 * 21 - 10, 500 - 6 * j, 3);
+                txCircle(6 * 22 - 10, 500 - 6 * j, 3);
+                txCircle(6 * 69 - 10, 500 - 6 * j, 3);
+                txCircle(6 * 70 - 10, 500 - 6 * j, 3);
+            }
+
+            for (i = 1; i<N; i++)
+            {
+                for (j = 1; j<M; j++)
+                {
+                    y[i][j] = yy[i][j];
+                    txSetColor(TX_YELLOW);
+                    txSetFillColor(TX_YELLOW);
+                    if ((y[i][j] >= 1) && (y[i][j] <= r))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 3);
+                    }
+                    txSetColor(TX_LIGHTBLUE);
+                    txSetFillColor(TX_LIGHTBLUE);
+                    if ((y[i][j]>6) && (y[i][j] <= s))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 2);
+                    }
+                }
+            }
+        }
 	}
-	for (i = 1; i<13; i++)
-	{
-		y[40 + i][j] = i;
-		if (j>40)
-		{
-			y[40 + i][j] = 14 - i;
-		}
-	}
-
-	while (true)
-	{
-		if (k == round((k/20)*20)) //(k == int(k / 20 + .5) * 20)
-		{
-			y[80][50] = 1;
-		}
-		if (k == round((k/20)*20))
-		{
-			y[20][70] = 1;
-		}
-		for (i = 2; i <= n - 1; i++)
-		{
-			for (j = 2; j <= m - 1; j++)
-			{
-				if ((y[i][j]>0) && (y[i][j]<s))
-				{
-					yy[i][j] = y[i][j] + 1;
-				}
-				if (y[i][j] == s)
-				{
-					yy[i][j] = 0;
-					u[i][j] = 0;
-				}
-				if (y[i][j] != 0)
-				{
-					goto met;
-				}
 
 
-				for (ii = i - 1; ii <= i + 1; ii++)
-				{
-					for (jj = j - 1; jj <= j + 1; jj++)
-					{
-						if ((y[ii][jj]>0) && (y[ii][jj] <= r))
-						{
-							u[i][j] = u[i][j] + 1;
-						}
-						if (u[i][j] >= h)
-						{
-							yy[i][j] = 1;
-						}
-					}
-				}
+	 ///////////////////////////////////////////////////////////////////////
+	if (answer == '3')
+    {
+        while (true)
+        {
+            if (k == round((k/20)*20))
+            {
+                y[80][50] = 1;
+            }
+            if (k == round((k/20)*20))
+            {
+                y[40][40] = 1;
+            }
+            for (i = 2; i <= N - 1; i++)
+            {
+                for (j = 2; j <= M - 1; j++)
+                {
+                    if ((y[i][j]>0) && (y[i][j]<s))
+                    {
+                        yy[i][j] = y[i][j] + 1;
+                    }
+                    if (y[i][j] == s)
+                    {
+                        yy[i][j] = 0;
+                        u[i][j] = 0;
+                    }
+                    if (y[i][j] != 0)
+                    {
+                        goto met2;
+                    }
 
-			met:
-				continue;
-			}
-		}
 
-		txSleep(100);
-		txSetFillColor(TX_BLACK);
-		txClear();
-		txSetColor(TX_GREEN);
-		for (i = 21; i <= 70; i++)
-		{
-			yy[i][60] = 0;
-			yy[i][61] = 0;
-			txCircle(6 * i - 10, 500 - 6 * 60, 3);
-			txCircle(6 * i - 10, 500 - 6 * 61, 3);
-		}
-		for (j = 40; j <= 60; j++)
-		{
-			yy[21][j] = 0;
-			yy[22][j] = 0;
-			yy[69][j] = 0;
-			yy[70][j] = 0;
-			txCircle(6 * 21 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 22 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 69 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 70 - 10, 500 - 6 * j, 3);
-		}
-		for (i = 60; i <= 100; i++)
-		{
-			yy[i][10] = 0;
-			yy[i][11] = 0;
-			txCircle(6 * i - 10, 500 - 6 * 10, 3);
-			txCircle(6 * i - 10, 500 - 6 * 11, 3);
-		}
-		for (j = 11; j <= 40; j++)
-		{
-			yy[99][j] = 0;
-			yy[100][j] = 0;
-			txCircle(6 * 99 - 10, 500 - 6 * j, 3);
-			txCircle(6 * 100 - 10, 500 - 6 * j, 3);
-		}
-		txSetColor(TX_MAGENTA);
+                    for (ii = i - 1; ii <= i + 1; ii++)
+                    {
+                        for (jj = j - 1; jj <= j + 1; jj++)
+                        {
+                            if ((y[ii][jj]>0) && (y[ii][jj] <= r))
+                            {
+                                u[i][j] = u[i][j] + 1;
+                            }
+                            if (u[i][j] >= h)
+                            {
+                                yy[i][j] = 1;
+                            }
+                        }
+                    }
 
-		for (i = 1; i<n; i++)
-		{
-			for (j = 1; j<m; j++)
-			{
-				y[i][j] = yy[i][j];
-				txSetColor(TX_RED);
-				if ((y[i][j] >= 1) && (y[i][j] <= r))
-				{
-					txCircle(6 * i - 10, 500 - 6 * j, 3);
-				}
-				txSetColor(TX_MAGENTA);
-				if ((y[i][j]>6) && (y[i][j] <= s))
-				{
-					txCircle(6 * i - 10, 500 - 6 * j, 2);
-				}
-			}
+                met2:
+                    continue;
+                }
+            }
+
+            txSleep(100);
+            txSetFillColor(TX_BLACK);
+            txClear();
+            txSetColor(TX_GREEN); // препятствия
+            txSetFillColor(TX_GREEN);
+            for (i = 60; i <= 100; i++)
+            {
+                yy[i][10] = 0;
+                yy[i][11] = 0;
+                txCircle(6 * i - 10, 500 - 6 * 10, 3);
+                txCircle(6 * i - 10, 500 - 6 * 11, 3);
+            }
+            for (j = 11; j <= 40; j++)
+            {
+                yy[99][j] = 0;
+                yy[100][j] = 0;
+                txCircle(6 * 99 - 10, 500 - 6 * j, 3);
+                txCircle(6 * 100 - 10, 500 - 6 * j, 3);
+            }
+
+            for (i = 1; i<N; i++)
+            {
+                for (j = 1; j<M; j++)
+                {
+                    y[i][j] = yy[i][j];
+                    txSetColor(TX_YELLOW);
+                    txSetFillColor(TX_YELLOW);
+                    if ((y[i][j] >= 1) && (y[i][j] <= r))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 3);
+                    }
+                    txSetColor(TX_LIGHTBLUE);
+                    txSetFillColor(TX_LIGHTBLUE);
+                    if ((y[i][j]>6) && (y[i][j] <= s))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 2);
+                    }
+                }
+            }
+            }
 		}
-	}
+		//////////////////////////////////////////////////
+    if (answer == '4')
+    {
+        while (true)
+        {
+            if (k == round((k/20)*20))
+            {
+                y[80][50] = 1;
+            }
+            if (k == round((k/20)*20))
+            {
+                y[40][40] = 1;
+            }
+            for (i = 2; i <= N - 1; i++)
+            {
+                for (j = 2; j <= M - 1; j++)
+                {
+                    if ((y[i][j]>0) && (y[i][j]<s))
+                    {
+                        yy[i][j] = y[i][j] + 1;
+                    }
+                    if (y[i][j] == s)
+                    {
+                        yy[i][j] = 0;
+                        u[i][j] = 0;
+                    }
+                    if (y[i][j] != 0)
+                    {
+                        goto met3;
+                    }
+
+
+                    for (ii = i - 1; ii <= i + 1; ii++)
+                    {
+                        for (jj = j - 1; jj <= j + 1; jj++)
+                        {
+                            if ((y[ii][jj]>0) && (y[ii][jj] <= r))
+                            {
+                                u[i][j] = u[i][j] + 1;
+                            }
+                            if (u[i][j] >= h)
+                            {
+                                yy[i][j] = 1;
+                            }
+                        }
+                    }
+
+                met3:
+                    continue;
+                }
+            }
+            txSleep(100);
+            txSetFillColor(TX_BLACK);
+            txClear();
+            txSetColor(TX_GREEN); // препятсвтия
+            txSetFillColor(TX_GREEN);
+            for (i = 60; i <= 80; i++)
+            {
+                yy[i][40] = 0;
+                yy[i][41] = 0;
+                txCircle(6 * i - 10, 500 - 6 * 40, 3);
+                txCircle(6 * i - 10, 500 - 6 * 41, 3);
+            }
+            for (i = 1; i<N; i++)
+            {
+                for (j = 1; j<M; j++)
+                {
+                    y[i][j] = yy[i][j];
+                    txSetColor(TX_YELLOW);
+                    txSetFillColor(TX_YELLOW);
+                    if ((y[i][j] >= 1) && (y[i][j] <= r))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 3);
+                    }
+                    txSetColor(TX_LIGHTBLUE);
+                    txSetFillColor(TX_LIGHTBLUE);
+                    if ((y[i][j]>6) && (y[i][j] <= s))
+                    {
+                        txCircle(6 * i - 10, 500 - 6 * j, 2);
+                    }
+                }
+            }
+            }
+        }
+
 	return 0;
 }
