@@ -4,22 +4,15 @@
 using namespace std;
 
 COLORREF REF;
-int SetCh = 0; //setka type
-int ClrCh = 1;  //color choice
+int SetCh = 0; //Выбор шага сетки
+int ClrCh = 1;  //Выбор цвета
 double xs = 500, ys = 300; //x0 y0
 double x = 0, y = 0;
+bool creds = false;
+bool g1 = false, g2 = false, g3 = false , g4 = false, g5 = false;
 int Mx = 0, My = 0;
 
-bool ExB, SetB, ClrB, CrB, GraphB, ClearB;
-bool Cred = false; //credit flag
-int g1 = 0, g2 = 0, g3 = 0, g4 = 0, g5 = 0;  //Graphs
 
-
-void Initialize()
-{
-    txCreateWindow(800, 600);
-    txTextCursor(false);
-};
 
 void Frame()
 {
@@ -28,53 +21,60 @@ void Frame()
     txRectangle(200,0,800,600);
     txRectangle(0,0,200,600);
 };
-
 void DrawText()
 {
-    txTextOut(30, 50, "Setka");
-    if (SetCh == 0) txTextOut(80, 60, "net setki");
-    if (SetCh == 1) txTextOut(80, 60, "0.5");
-    if (SetCh == 2) txTextOut(80, 60, "1");
-    if ()
-    if (Cred) txTextOut (10, 450, "Daniil Kildushkin");
-    if (g1) txTextOut (10, 210, "y = sin(x)");
-    if (g2) txTextOut (10, 235, "y = x*x");
-    if (g3) txTextOut (10, 260, "y = x*cos(x)");
-    if (g4) txTextOut (10, 285, "y = x*x*x");
-    if (g5) txTextOut (10, 310, "|y|=|x|");
+    txTextOut(80, 90, "setka");
+    if (SetCh == 0) txTextOut(85, 120, "bez setki");
+    if (SetCh == 1) txTextOut(75, 120, "Step = 0.5");
+    if (SetCh == 2) txTextOut(85, 120, "Step = 1");
+    txTextOut(80, 280, "color");
+    if (ClrCh == 1) txTextOut(85, 320, "GREEN");
+    if (ClrCh == 2) txTextOut(85, 320, "RED");
+    if (ClrCh == 3) txTextOut(85, 320, "BLUE");
 }
-
-void DrawGraph(double k)
+//credits
+void credits()
+{
+    if (creds = true)
+    {
+        txTextOut(10, 580, "Done by D.K.");
+        txTextOut(10,560,"Use ESC for exit");
+        txTextOut(10,570,"USE CTRL for clear");
+    }
+    creds = false;
+};
+//draw net
+void NetDraw(double k)
 {
     txSetColour(TX_DARKGRAY, 0.5);
     double x;
     double y;
     for (int kk = 0; kk < 100; kk++)
-    {
-        x = k*25+k*kk*25+xs;
-        y = k*25-k*kk*25+xs;
-        if (x < 800) txLine (x, 0, x, 600);
-        if (y > 200) txLine (y, 0, y, 600);
-        x = k*25+k*kk*25+ys;
-        y = k*25-k*kk*25+ys;
-        if (y > 0) txLine (200, y, 800, y);
-        if (x < 600) txLine (200, x, 800, x);
-    }
+        {
+            x = k*25+k*kk*25+xs;
+            y = k*25-k*kk*25+xs;
+            if (x < 800) txLine (x, 0, x, 600);
+            if (y > 200) txLine (y, 0, y, 600);
+            x = k*25+k*kk*25+ys;
+            y = k*25-k*kk*25+ys;
+            if (y > 0) txLine (200, y, 800, y);
+            if (x < 600) txLine (200, x, 800, x);
+        }
 };
 
-void setbuild()
+void NetChoice()
 {
     SetCh++;
-    if (SetCh > 2) SetCh = 0;
+    if (SetCh > 4) SetCh = 0;
     if (SetCh == 0) SetCh = 0;
-    if (SetCh == 1) DrawGraph(0.5);
-    if (SetCh == 2) DrawGraph(1);
+    if (SetCh == 1) NetDraw(0.5);
+    if (SetCh == 2) NetDraw(1);
     txSetColour(TX_BLACK, 1.5);
     txLine (500, 0, 500, 600);
     txLine (200, 300, 800, 300);
 };
 
-void ColorChange()
+void ColorChoice()
 {
     ClrCh++;
     if (ClrCh > 3) ClrCh = 1;
@@ -82,165 +82,150 @@ void ColorChange()
     if (ClrCh == 2) REF = TX_RED;
     if (ClrCh == 3) REF = TX_BLUE;
 }
-//gr1
-void Sin(bool gd)
+
+void Sin(bool sn)
 {
-if (gd) for (x=-300; x < 300; x+=0.01)
+    if (sn) for (x=-300; x < 300; x+=0.01)
     {
         y=sin(x)*(-25);
         if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
-
     }
 };
-//gr2
-void GKxx(bool smd)
-{
-    if (smd) for (x=-300; x < 300; x+=0.01)
-    {
-        y = 0.25*(x*x)*(-25);
-        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
-        y = 0.25*(x*x)*(25);
-        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
 
+void Fxx(bool xx)
+{
+    if (xx) for (x=-300; x < 300; x+=0.01)
+    {
+        y = (x*x)*(-25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+        y = (x*x)*(25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+    }
+
+};
+
+void Cos(bool cs)
+{
+    if (cs) for (x=-300; x < 300; x+=0.01)
+    {
+        y = cos(x)*(-25);
+        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
     }
 };
-//gr3
-void Cos(bool qcd)
+
+void Fxxx(bool xxx)
 {
-    if (qcd) for (x=-300; x < 300; x+=0.001)
+    if (xxx) for (x=-300; x < 300; x+=0.01)
     {
-        y=x*x*cos(x)*(-25);
-        if (x*25+xs > 200) txSetPixel (x*25+xs, y+ys, REF);
+        y = (x*x*x)*(-25);
+        if(x*25+xs > 200) txSetPixel (x*25+xs,y+ys,REF);
     }
 };
-//gr4
-void GKxxx(bool kx)
-{
-    if (kx) for (x=-300; x < 300; x +=0.001)
-    {
-        y=x*x*x*(-25);
-        if(x*25+xs > 200) txSetPixel(x*25+xs, y+ys, REF);
 
+void Modul(bool md)
+{
+  if (md) for (x=-300; x < 300; x+=0.001)
+  {
+      y = fabs(x)*(-25);
+      if(x*25+xs > 200) txSetPixel (x*25+xs,y+ys,REF);
+  }
+};
+
+//Button1
+void SetButton(bool sb)
+{
+    txSetColour(TX_DARKGRAY, 4);
+    if (sb) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
+    txRectangle(0, 0, 200, 200);
+    txSetColour(TX_BLACK, 4);
+    DrawText();
+    if (GetAsyncKeyState(VK_SPACE))
+    {
+        txSetFillColour(TX_RED);
+        txRectangle(0,0,200,200);
     }
 }
-//gr5
-void Modul(bool modu)
+//Button2
+void ColorButton(bool cb)
 {
-    if (modu) for (x=-300; x < 300; x += 0.01)
+    txSetColour(TX_DARKGRAY, 4);
+    if (cb) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
+    txRectangle(0, 200, 200, 400);
+    txSetColour(TX_BLACK, 4);
+    DrawText();
+    if (GetAsyncKeyState(VK_LSHIFT))
     {
-        y = abs(x) * (-25);
-        if (x*25+xs > 200) txSetPixel(x*25+xs,y+ys,REF);
+        txSetFillColour(TX_YELLOW);
+        txRectangle(0,200,200,400);
+    }
 
+}
+//Button3
+void CreditsButton(bool crb)
+{
+    txSetColour(TX_DARKGRAY, 4);
+    if (crb) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
+    txRectangle(0, 400, 200, 600);
+    txSetColour(TX_BLACK, 4);
+    DrawText();
+    if (GetAsyncKeyState(VK_TAB))
+    {
+        txSetFillColour(TX_GREEN);
+        txRectangle(0,400,200,600);
     }
 }
 
-void ButtonSet(bool bs)
-{
-    txSetColour(TX_DARKGRAY, 4);
-    if (bs) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
-    txRectangle(0, 0, 200, 100);
-    txSetColour(TX_BLACK, 4);
-    DrawText();
-}
-
-void ButtonClr(bool bc)
-{
-    txSetColour(TX_DARKGRAY, 4);
-    if (bc) txSetFillColour(REF); else txSetFillColour(TX_WHITE);
-    txRectangle(0, 100, 200, 200);
-    txSetColour(TX_BLACK, 4);
-    DrawText();
-}
-
-void ButtonCred(bool bcr)
-{
-    txSetColour(TX_DARKGRAY, 4);
-    if (bcr) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_WHITE);
-    txRectangle(0, 400, 200, 500);
-    txSetColour(TX_BLACK, 4);
-    DrawText();
-}
-
-void ButtonEx(bool ex)
-{
-    txSetColour(TX_DARKGRAY, 4);
-    if (ex) txSetFillColour(TX_RED); else txSetFillColour(TX_DARKGRAY);
-    txRectangle(0, 500, 200, 600);
-    txSetColour(TX_BLACK, 4);
-    DrawText();
-}
-
-void ClrGraph(bool cg)
-{
-    txSetColour(TX_DARKGRAY, 4);
-    if (cg) txSetFillColour(TX_LIGHTGRAY); else txSetFillColour(TX_BLACK);
-    txRectangle(0, 325, 200, 400);
-    txSetColour(TX_BLACK, 4);
-    DrawText();
-}
 
 int main()
 {
+    txCreateWindow(800, 600);
+    txTextCursor(FALSE);
 
-    Initialize();
     Frame();
-    setbuild();
-    REF = TX_GREEN;
+    NetChoice();
+    REF = TX_WHITE;
 
-
-    while (1)
-    {
-
+//workspace
+while (1)
+{
         Mx = txMouseX();
         My = txMouseY();
+        if (GetAsyncKeyState(VK_ESCAPE)) break; //exit
 
-        SetB = (Mx < 200)&&(My < 100);
-        ClrB =  (Mx < 200)&&(My < 200)&&(My > 100);
-        GraphB =  (Mx < 200)&&(My < 400)&&(My > 200);
-        CrB =  (Mx < 200)&&(My < 500)&&(My > 400);
-        ExB =  (Mx < 200)&&(My < 600)&&(My > 500);
-        ClearB =  (Mx < 200)&&(My < 400)&&(My > 325);
+    if ((Mx < 200)&&(My < 200)) SetButton(1); else SetButton(0);
+    if ((Mx < 200)&&(My < 400)&&(My > 200)) ColorButton(1); else ColorButton(0);
+    if ((Mx < 200)&&(My < 600)&&(My > 400)) CreditsButton(1); else CreditsButton(0);
+    if ((GetAsyncKeyState(VK_SPACE))||((txMouseButtons() == 1)&&(Mx < 200)&&(My < 200)))
+    {
+        txClear();
+        Frame();
+        NetChoice();
+    }
+    if ((GetAsyncKeyState(VK_LSHIFT))||((txMouseButtons() == 1)&&((Mx < 200)&&(My < 400)&&(My > 200)))) ColorChoice(); //color
 
+    if ((GetAsyncKeyState(VK_TAB))||((txMouseButtons() == 1)&&((Mx < 200)&&(My < 600)&&(My > 400)))) credits(); // credits
 
-        if (SetB) ButtonSet(SetB); else ButtonSet(SetB);
-        if (ClrB) ButtonClr(ClrB); else ButtonClr(ClrB);
-        if (CrB) ButtonCred(CrB); else ButtonCred(CrB);
-        if (ExB) ButtonEx(ExB); else ButtonEx(ExB);
-        if (ClearB) ClrGraph(ClearB); else ClrGraph(ClearB);
-
-
-        if ((GetAsyncKeyState(VK_TAB))||((txMouseButtons() == 1)&&(CrB))) if (Cred) Cred = false; else Cred = true;
-
-        if ((GetAsyncKeyState(VK_ESCAPE))||((ExB)&&(txMouseButtons()==1))) break;
-
-        if ((GetAsyncKeyState(VK_RSHIFT)||((ClearB)&&(txMouseButtons()==1))))
-        {
-            txClear();
-            Frame();
-        }
-
-        if ((GetAsyncKeyState(VK_SPACE))||((ButtonSet)&&(txMouseButtons() == 1)))
-        {
-            txClear();
-            Frame();
-            setbuild();
-        }
-
-        if ((GetAsyncKeyState(VK_LSHIFT))||((txMouseButtons() == 1)&&(ClrB))) ColorChange();
-
-        if ((GetAsyncKeyState(0x31))||((GraphB)&&(My < 225)&&(My > 200)&&(txMouseButtons() == 1))) if(g1==1) g1 = 0; else g1 = 1;
-        if ((GetAsyncKeyState(0x32))||((GraphB)&&(My < 250)&&(My > 225)&&(txMouseButtons() == 1))) if(g2==1) g2 = 0; else g2 = 1;
-        if ((GetAsyncKeyState(0x33))||((GraphB)&&(My < 275)&&(My > 250)&&(txMouseButtons() == 1))) if(g3==1) g3 = 0; else g3 = 1;
-        if ((GetAsyncKeyState(0x34))||((GraphB)&&(My < 300)&&(My > 275)&&(txMouseButtons() == 1))) if(g4==1) g4 = 0; else g4 = 1;
-        if ((GetAsyncKeyState(0x35))||((GraphB)&&(My < 325)&&(My > 300)&&(txMouseButtons() == 1))) if(g5==1) g5 = 0; else g5 = 1;
-        Sin(g1);
-        GKxx(g2);
-        Cos(g3);
-        GKxxx(g4);
-        Modul(g5);
-
+    if (GetAsyncKeyState(VK_CONTROL))
+    {
+        txClear();
+        Frame();
 
     }
+
+
+    if (GetAsyncKeyState(0x31)) if (g1) g1 = FALSE; else g1 = TRUE;
+    if (GetAsyncKeyState(0x32)) if (g2) g2 = FALSE; else g2 = TRUE;
+    if (GetAsyncKeyState(0x33)) if (g3) g3 = FALSE; else g3 = TRUE;
+    if (GetAsyncKeyState(0x34)) if (g4) g4 = FALSE; else g4 = TRUE;
+    if (GetAsyncKeyState(0x35)) if (g5) g5 = FALSE; else g5 = TRUE;
+
+    Sin(g1);
+    Fxx(g2);
+    Cos(g3);
+    Fxxx(g4);
+    Modul(g5);
+
+}
     txDisableAutoPause();
     return 0;
 }
