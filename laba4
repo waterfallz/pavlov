@@ -35,11 +35,11 @@ void Schet()
 		xxii1[j]=xi1[j];
 		if (j<(n/2))
 		{
-			vv1=4;
+			vv1=0.5;
 		}
 		else
 		{
-			vv1=0.5;
+			vv1=4;
 		}
 		eta1[j]=eta1[j]+vv1*(xi1[j+1]-2*xi1[j]+xi1[j-1])/(h*h)*dt;
 	}
@@ -59,9 +59,9 @@ void Draw()
 void Draw2()
 {
 	txSetColor(TX_BLACK);
-	txLine(j*3-3,240-(xxii1[j-1]*50)+400,j*3,240-(xxii1[j]*50)+400);
-	txSetColor(TX_RED);
-	txLine(j*3-3,240-(xi1[j-1]*50)+400,j*3,240-(xi1[j]*50)+400);
+	txLine(j*3-3,240-(xxii1[j-1]*50),j*3,240-(xxii1[j]*50));
+	txSetColor(TX_GREEN);
+	txLine(j*3-3,240-(xi1[j-1]*50),j*3,240-(xi1[j]*50));
 }
 void Zapusk(double koff)
 {
@@ -92,13 +92,13 @@ label:
 		t+=dt;
 		if (t<tt)
 		{
-			xi[n]=koff*sin(t);
-			xi1[1]=koff*sin(t);
+			xi[1]=koff*sin(t);
+			xi1[n]=koff*sin(t);
 		}
 		else
 		{
 			xi[n]=0;
-			xi1[1]=0;
+			xi1[n]=0;
 		}
 		Raschet();
 		Schet();
